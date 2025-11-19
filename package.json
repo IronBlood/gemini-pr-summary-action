@@ -1,0 +1,27 @@
+{
+  "name": "gemini-pr-summary-action",
+  "version": "0.0.0-dev",
+  "description": "",
+  "main": "dist/index.js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsdown"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [],
+  "author": "Yang Shen",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.19.25",
+    "tsdown": "^0.16.5",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.1",
+    "@google/genai": "^1.30.0"
+  }
+}
