@@ -14,10 +14,10 @@ importers:
       '@actions/github':
         specifier: ^6.0.1
         version: 6.0.1
-    devDependencies:
       '@google/genai':
         specifier: ^1.30.0
         version: 1.30.0
+    devDependencies:
       '@types/node':
         specifier: ^20.19.25
         version: 20.19.25
