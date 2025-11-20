@@ -3,8 +3,20 @@ name: CI
 on:
   push:
     branches: [main]
+    paths:
+      - ".github/workflows/ci.yml"
+      - "src/**/*.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "tsdown.config.ts"
   pull_request:
     branches: [main]
+    paths:
+      - ".github/workflows/ci.yml"
+      - "src/**/*.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "tsdown.config.ts"
 
 jobs:
   ci:
