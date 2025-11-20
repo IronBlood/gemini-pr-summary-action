@@ -1,0 +1,67 @@
+name: Build dist and release
+
+on:
+  push:
+    tags:
+      - "release-v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout source at tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: SetupNode
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build dist
+        run: pnpm run build
+
+      - name: Publish dist to release branch and tag
+        env:
+          ACTION_PUBLISH_TOKEN: ${{ secrets.ACTION_PUBLISH_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          # release-v1.2.3 -> v1.2.3
+          VERSION="${TAG_NAME#release-}"
+          echo "Releasing version: $VERSION"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # "-B" instead of "-b", create or reset the "release" branch based on this tag
+          git checkout -B release
+
+          git add dist
+
+          if git diff --cached --quiet; then
+            echo "No changes in dist/, nothing to commit."
+          else
+            git commit -m "chore: build dist for $VERSION"
+          fi
+
+          # Push the release branch
+          git push "https://x-access-token:${ACTION_PUBLISH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:release
+
+          git tag $VERSION -f
+          git push "https://x-access-token:${ACTION_PUBLISH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$VERSION" --force
