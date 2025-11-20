@@ -1,0 +1,16 @@
+name: "Gemini PR Summary"
+description: "Summarize pull requests with Gemini and post the summary as a PR comment."
+author: "Yang Shen"
+
+inputs:
+  github_token:
+    description: "GitHub token with permission to read the PR and create comments (usually github.token)."
+    required: true
+
+runs:
+  using: "node20"
+  main: "dist/index.mjs"
+
+branding:
+  icon: "message-circle"
+  color: "blue"
